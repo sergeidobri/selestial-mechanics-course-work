@@ -1,17 +1,6 @@
 from math import sin, tan, atan, cos, pi, sqrt
 import matplotlib.pyplot as plt
 import time
-from dotenv import load_dotenv
-import os
-
-
-def load_data(path):
-    if os.path.exists(path):
-        load_dotenv(path)
-    else:
-        raise FileNotFoundError(f'Файл {path} не был найден.')
-
-    return float(os.getenv('e')), float(os.getenv('frequency'))
 
 def computing_Nu(e, E, M_last, pi):
     res = 2 * atan(sqrt((1 + e) / (1 - e)) * tan(E / 2))
@@ -73,13 +62,12 @@ def find_E_newton(M, e, precision):
     return E_new
 
 def main():
-    count_time_iterations = 1e5
-    path_to_data = 'data.env'
-    e, frequency = load_data(path_to_data)
+    count_time_iterations = 1e5  # количество итераций
+    e, frequency = 0.24, 15.50663641
     precision = 1e-5
 
     frequency /= 24*60*60  # перевод частоты об/сут. -> об/сек.
-    period = 1 / frequency
+    period = 1 / frequency  # период обращения
     
     # высчитываем отдельно M и t
     time_start, time_end, time_step = 0, period, period / count_time_iterations
@@ -110,16 +98,18 @@ def main():
  
     print(f"Время вычисления методом половинного деления: {execution_time} секунд")
 
-    axs[0, 0].plot(t_arr, E_arr, label='E(t)', color='blue', linestyle='-', markersize=0.1)
-    axs[0, 0].plot(t_arr, M_arr, label='M(t)', color='red', linestyle='-', markersize=0.1)
-    axs[0, 0].plot(t_arr, Nu_arr, label='Nu(t)', color='orange', linestyle='-', markersize=0.1)
+    fig1 = axs[0, 0]
 
-    axs[0, 0].set_title('Метод половинного деления')
-    axs[0, 0].set_xlabel('Время (t)')
-    axs[0, 0].set_ylabel('Значение функции')
+    fig1.plot(t_arr, E_arr, label='E(t)', color='blue', markersize=0.1)
+    fig1.plot(t_arr, M_arr, label='M(t)', color='red', markersize=0.1)
+    fig1.plot(t_arr, Nu_arr, label='Nu(t)', color='orange', markersize=0.1)
 
-    axs[0, 0].grid(True, linestyle='--', alpha=0.5)
-    axs[0, 0].legend()
+    fig1.set_title('Метод половинного деления')
+    fig1.set_xlabel('Время (t)')
+    fig1.set_ylabel('Значение функции')
+
+    fig1.grid(True, linestyle='--', alpha=0.5)
+    fig1.legend()
     # 2. Метод золотого сечения
     print("Начало метода золотого сечения.")
 
@@ -137,16 +127,18 @@ def main():
  
     print(f"Время вычисления методом золотого сечения: {execution_time} секунд")
 
-    axs[0, 1].plot(t_arr, E_arr, label='E(t)', color='blue', linestyle='-', markersize=0.1)
-    axs[0, 1].plot(t_arr, M_arr, label='M(t)', color='red', linestyle='-', markersize=0.1)
-    axs[0, 1].plot(t_arr, Nu_arr, label='Nu(t)', color='orange', linestyle='-', markersize=0.1)
+    fig2 = axs[0, 1]
 
-    axs[0, 1].set_title('Метод золотого сечения')
-    axs[0, 1].set_xlabel('Время (t)')
-    axs[0, 1].set_ylabel('Значение функции')
+    fig2.plot(t_arr, E_arr, label='E(t)', color='blue', markersize=0.1)
+    fig2.plot(t_arr, M_arr, label='M(t)', color='red', markersize=0.1)
+    fig2.plot(t_arr, Nu_arr, label='Nu(t)', color='orange', markersize=0.1)
 
-    axs[0, 1].grid(True, linestyle='--', alpha=0.5)
-    axs[0, 1].legend()
+    fig2.set_title('Метод золотого сечения')
+    fig2.set_xlabel('Время (t)')
+    fig2.set_ylabel('Значение функции')
+
+    fig2.grid(True, linestyle='--', alpha=0.5)
+    fig2.legend()
 
     # 3. Метод итераций (метод последовательных приближений)
     print("Начало метода итераций (метода последовательных приближений).")
@@ -165,16 +157,18 @@ def main():
  
     print(f"Время вычисления методом итераций (методом последовательных приближений): {execution_time} секунд")
 
-    axs[1, 0].plot(t_arr, E_arr, label='E(t)', color='blue', linestyle='-', markersize=0.1)
-    axs[1, 0].plot(t_arr, M_arr, label='M(t)', color='red', linestyle='-', markersize=0.1)
-    axs[1, 0].plot(t_arr, Nu_arr, label='Nu(t)', color='orange', linestyle='-', markersize=0.1)
+    fig3 = axs[1, 0]
 
-    axs[1, 0].set_title('Метод последовательных приближений')
-    axs[1, 0].set_xlabel('Время (t)')
-    axs[1, 0].set_ylabel('Значение функции')
+    fig3.plot(t_arr, E_arr, label='E(t)', color='blue', markersize=0.1)
+    fig3.plot(t_arr, M_arr, label='M(t)', color='red', markersize=0.1)
+    fig3.plot(t_arr, Nu_arr, label='Nu(t)', color='orange', markersize=0.1)
 
-    axs[1, 0].grid(True, linestyle='--', alpha=0.5)
-    axs[1, 0].legend()
+    fig3.set_title('Метод последовательных приближений')
+    fig3.set_xlabel('Время (t)')
+    fig3.set_ylabel('Значение функции')
+
+    fig3.grid(True, linestyle='--', alpha=0.5)
+    fig3.legend()
 
     # 4. Метод Ньютона (метод касательных)
 
@@ -194,16 +188,18 @@ def main():
  
     print(f"Время вычисления методом Ньютона: {execution_time} секунд")
 
-    axs[1, 1].plot(t_arr, E_arr, label='E(t)', color='blue', linestyle='-', markersize=0.1)
-    axs[1, 1].plot(t_arr, M_arr, label='M(t)', color='red', linestyle='-', markersize=0.1)
-    axs[1, 1].plot(t_arr, Nu_arr, label='Nu(t)', color='orange', linestyle='-', markersize=0.1)
+    fig4 = axs[1, 1]
 
-    axs[1, 1].set_title('Метод Ньютона (метод касательных)')
-    axs[1, 1].set_xlabel('Время (t)')
-    axs[1, 1].set_ylabel('Значение функции')
+    fig4.plot(t_arr, E_arr, label='E(t)', color='blue', markersize=0.1)
+    fig4.plot(t_arr, M_arr, label='M(t)', color='red', markersize=0.1)
+    fig4.plot(t_arr, Nu_arr, label='Nu(t)', color='orange', markersize=0.1)
 
-    axs[1, 1].grid(True, linestyle='--', alpha=0.5)
-    axs[1, 1].legend()  
+    fig4.set_title('Метод Ньютона (метод касательных)')
+    fig4.set_xlabel('Время (t)')
+    fig4.set_ylabel('Значение функции')
+
+    fig4.grid(True, linestyle='--', alpha=0.5)
+    fig4.legend()  
 
     plt.show()
 
