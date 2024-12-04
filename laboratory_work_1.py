@@ -1,73 +1,16 @@
-from math import sin, tan, atan, cos, pi, sqrt
+from keplers_equation import *
 import matplotlib.pyplot as plt
 import time
 
-def computing_Nu(e, E, M_last, pi):
-    res = 2 * atan(sqrt((1 + e) / (1 - e)) * tan(E / 2))
-    if M_last > pi:
-        res += 2 * pi
-    return res
-
-def find_E_half_div(start, end, precision, t, e, freq, pi):
-    E_now = None
-    while end - start >= 2 * precision:
-        E_now = (start + end) / 2
-        f_now = E_now - e * sin(E_now) - 2 * pi * freq * t
-        if f_now == 0:
-            return E_now
-        elif f_now > 0:
-            end = E_now
-        else:
-            start = E_now
-    
-    if E_now is not None:
-        return E_now
-    return 'Возникла ошибка при вычислении корня'
-
-def find_E_golden_ration(start, end, precision, t, e, freq, pi):
-    E_now = None
-    golden_ratio = (5 ** 0.5 + 1) / 2
-    while end - start >= 2 * precision:
-        E_now = start + (end - start) / golden_ratio
-        f_now = E_now - e * sin(E_now) - 2 * pi * freq * t
-        if f_now == 0:
-            return E_now
-        elif f_now > 0:
-            end = E_now
-        else:
-            start = E_now
-    
-    if E_now is not None:
-        return E_now
-    return 'Возникла ошибка при вычислении корня'
-
-def find_E_success_approx(M, e, precision):
-    E_old = 0
-    E_new = M
-    while abs(E_new - E_old) >= precision:
-        E_old = E_new
-        E_new = e * sin(E_old) + M
-
-    return E_new
-
-def find_E_newton(M, e, precision):
-    E_old = 0
-    E_new = M
-    while abs(E_new - E_old) >= precision:
-        E_old = E_new
-        f_old = E_old - e * sin(E_old) - M
-        f_derivative_old = 1 - e * cos(E_old)
-        E_new = E_old - (f_old / f_derivative_old)
-    
-    return E_new
 
 def main():
     count_time_iterations = 1e5  # количество итераций
-    e, frequency = 0.24, 15.50663641
-    precision = 1e-5
+    e, period, mu = load_info("selestial_mechanics/venus_orbit_elements.env")
+    period *= 3600
+    precision = 1e-10
 
-    frequency /= 24*60*60  # перевод частоты об/сут. -> об/сек.
-    period = 1 / frequency  # период обращения
+    # frequency /= 24*60*60  # перевод частоты об/сут. -> об/сек.
+    frequency = 1 / period  # частота обращения
     
     # высчитываем отдельно M и t
     time_start, time_end, time_step = 0, period, period / count_time_iterations
@@ -110,6 +53,7 @@ def main():
 
     fig1.grid(True, linestyle='--', alpha=0.5)
     fig1.legend()
+
     # 2. Метод золотого сечения
     print("Начало метода золотого сечения.")
 
@@ -202,7 +146,6 @@ def main():
     fig4.legend()  
 
     plt.show()
-
 
 if __name__ == '__main__':
     main()
