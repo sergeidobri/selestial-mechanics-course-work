@@ -68,6 +68,3 @@ def find_E_newton(M, e, precision):
         E_new = E_old - (f_old / f_derivative_old)
     
     return E_new
-
-def compouting_radius_vector(e, Nu_now, p):
-    ...
