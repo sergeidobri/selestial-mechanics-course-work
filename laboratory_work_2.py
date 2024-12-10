@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 def main():
     # Самым эффективным оказался метод последовательных приближений. Используем его.
-    e, T, mu = load_info("selestial_mechanics/venus_orbit_elements.env")
+    e, T, mu = load_info("venus_orbit_elements.env")
     cnt_iter = 100
     precision = 1e-5
     T *= 60 * 60

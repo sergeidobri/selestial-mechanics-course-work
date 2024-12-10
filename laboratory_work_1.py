@@ -5,7 +5,7 @@ import time
 
 def main():
     count_time_iterations = 1e5  # количество итераций
-    e, period, mu = load_info("selestial_mechanics/venus_orbit_elements.env")
+    e, period, mu = load_info("venus_orbit_elements.env")
     period *= 3600
     precision = 1e-10
 
